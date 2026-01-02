@@ -1,0 +1,174 @@
+index.html
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Xray VPN</title>
+<link rel="icon" href="https://github.com/oktoberdead/xray/raw/refs/heads/main/Desktop/xray/favicon.ico">
+<link rel="stylesheet" href="/xray/css/app.css">
+</head>
+<body>
+<h1>
+Xray VPN
+<span id="last-update" class="badge" title="Время последнего авто-обновления"></span>
+<span class="topbar">
+<button id="btn-theme" class="iconbtn" title="Тема / цвета">⚙</button>
+<button id="btn-refresh-state" class="iconbtn" title="Обновить статус сейчас">⟳</button>
+</span>
+</h1>
+<button id="apply-fab" title="Сохранить и применить все изменения">Применить изменения</button>
+<div class="section" id="hard-section">
+<h2>VPN процессы</h2>
+<div class="row">
+<span id="hard-status"></span>
+<span id="redir-badges"></span>
+</div>
+<div style="margin-top:.5em;">
+<button id="btn-hard-toggle"></button>
+<span id="apply-note" class="small"></span>
+</div>
+<hr class="sep">
+<div><span class="label">Статус:</span></div>
+<div id="status-box"></div>
+</div>
+<div class="section" id="global-section">
+<h2>Глобальные настройки</h2>
+<div class="row" style="margin-bottom:.4em;">
+<span class="label">Сервер:</span>
+<select id="global-server"></select>
+</div>
+<div class="row">
+<span class="label">Режим:</span>
+<label title="OFF: по умолчанию direct; per-host FULL/PARTIAL могут проксировать">
+<input type="radio" name="global-mode" value="off"> OFF
+</label>
+<label title="PARTIAL: проксируются только домены из списка">
+<input type="radio" name="global-mode" value="partial"> PARTIAL
+</label>
+<label title="FULL: по умолчанию всё через прокси">
+<input type="radio" name="global-mode" value="full"> FULL
+</label>
+</div>
+<div style="margin-top:.6em;">
+<button class="button-small" id="btn-toggle-global-domains">Домены для PARTIAL (показать/скрыть)</button>
+</div>
+<div id="global-domains-content" class="hidden" style="margin-top:.5em;">
+<textarea id="global-domains" class="domain-list"></textarea>
+</div>
+<div class="small" style="margin-top:.6em;">
+Автоприменение через 5 секунд после последнего изменения.
+</div>
+</div>
+<div class="section" id="hosts-section">
+<h2>Хосты</h2>
+<table id="policy-hosts-table">
+<thead>
+<tr>
+<th>IP</th>
+<th>Имя</th>
+<th title="Если включено, хост следует глобальным настройкам">Global?</th>
+<th title="Настройки хоста">Настройки</th>
+<th></th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<div style="margin-top:.5em;">
+<button id="btn-add-host" class="button-small">Добавить хост</button>
+</div>
+</div>
+<div class="section" id="active-hosts-section">
+<h2>Активные хосты</h2>
+<div class="row">
+<button id="btn-toggle-active-hosts" class="button-small">Показать</button>
+<button id="btn-refresh-hosts" class="button-small">Обновить</button>
+</div>
+<div id="active-hosts-content" class="hidden" style="margin-top:.5em;">
+<table id="active-hosts-table">
+<thead><tr><th></th><th>IP</th><th>Имя</th><th>MAC</th></tr></thead>
+<tbody></tbody>
+</table>
+</div>
+</div>
+<!-- Host modal -->
+<div class="modal-backdrop" id="modal-backdrop"></div>
+<div class="modal" id="host-modal">
+<div class="panel">
+<h3 id="host-modal-title"></h3>
+<div class="grid">
+<div class="k">Режим</div>
+<div>
+<select id="host-mode">
+<option value="full">FULL</option>
+<option value="partial">PARTIAL</option>
+<option value="off">OFF</option>
+</select>
+</div>
+<div class="k">Сервер</div>
+<div class="row">
+<select id="host-server"></select>
+<span class="small">Пусто = глобальный</span>
+</div>
+<div class="k">Домены</div>
+<div>
+<textarea id="host-domains" class="domain-list"></textarea>
+<div class="small">Только для PARTIAL (добавляются к глобальному списку).</div>
+</div>
+</div>
+<div class="row" style="margin-top:.8em; justify-content:flex-end;">
+<button id="host-modal-cancel">Отмена</button>
+<button id="host-modal-save">Сохранить</button>
+</div>
+</div>
+</div>
+<!-- Theme modal -->
+<div class="modal-backdrop" id="theme-backdrop"></div>
+<div class="modal" id="theme-modal">
+<div class="panel">
+<h3>Тема / цвета</h3>
+<div class="grid">
+<div class="k">Preset</div>
+<div class="row">
+<select id="theme-preset"></select>
+</div>
+<div class="k">Режим</div>
+<div class="row">
+<select id="theme-mode">
+<option value="preset">Preset</option>
+<option value="custom">Custom</option>
+</select>
+</div>
+<div class="k">Фон</div>
+<div class="row">
+<input type="color" id="c-bg">
+<span class="small" id="t-bg"></span>
+</div>
+<div class="k">Текст</div>
+<div class="row">
+<input type="color" id="c-fg">
+<span class="small" id="t-fg"></span>
+</div>
+<div class="k">Акцент</div>
+<div class="row">
+<input type="color" id="c-accent">
+<span class="small" id="t-accent"></span>
+</div>
+<div class="k">Панель</div>
+<div class="row">
+<input type="color" id="c-panel">
+<span class="small" id="t-panel"></span>
+</div>
+</div>
+<div class="row" style="margin-top:.8em; justify-content:flex-end;">
+<button id="theme-cancel">Закрыть</button>
+<button id="theme-save">Сохранить</button>
+</div>
+</div>
+</div>
+<script defer src="/xray/js/utils.js"></script>
+<script defer src="/xray/js/api.js"></script>
+<script defer src="/xray/js/theme.js"></script>
+<script defer src="/xray/js/app.js"></script>
+</body>
+</html>
